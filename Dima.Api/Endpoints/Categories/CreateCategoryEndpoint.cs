@@ -19,7 +19,7 @@ namespace Dima.Api.Endpoints.Categories
 
         private static async Task<IResult> HandleAsync(ClaimsPrincipal user,ICategoryHandler handler, CreateCategoryRequest request)
         {
-            request.UserId = user.Identity?.Name ?? string.Empty ;
+            request.UserId = user.Identity?.Name ?? string.Empty;
             var result = await handler.CreateAsync(request);
             return result.IsSuccess ? Results.Created($"/{result.Data?.Id}", result) : Results.BadRequest(result);
         }

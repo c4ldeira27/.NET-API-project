@@ -22,25 +22,13 @@ builder.AddServices();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if(app.Environment.IsDevelopment())
+    app.ConfigureDevEnvironment();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapGet("/", () => new { message = "Ok" });
+app.UseCors(Configuration.CorsPolicyName);
+app.UseSecurity();
 app.MapEndpoints();
-app.MapGroup("v1/identity")
-    .WithTags("Identity")
-    .MapIdentityApi<User>();
 
-app.MapGroup("v1/identity")
-    .WithTags("Identity")
-    .MapPost("/logout", async (SignInManager<User> signInManager) =>
-    {
-        await signInManager.SignOutAsync();
-        return Results.Ok();
-    }).RequireAuthorization();
 
 app.Run();
 
